@@ -118,7 +118,7 @@ int main(void)
     return 0;
 }
 
-void zh_avr_pcf8574_event_handler(zh_avr_pcf8574_event_on_isr_t *event) // Required only if used input GPIO interrupts.
+void zh_avr_pcf8574_event_handler(zh_avr_pcf8574_event_on_isr_t *event) // Do not delete! Leave blank if interrupts are not used.
 {
     printf("Interrupt happened on device address 0x%02X on GPIO number %d at level %d.\n", event->i2c_address, event->gpio_number, event->gpio_level);
     printf("Interrupt Task Remaining Stack Size %d.\n", uxTaskGetStackHighWaterMark(NULL));
