@@ -133,7 +133,7 @@ extern "C"
     /**
      * @brief PCF8574 ISR handler.
      */
-    void zh_avr_pcf8574_isr_handler(void);
+    BaseType_t zh_avr_pcf8574_isr_handler(void);
 
 #ifdef __cplusplus
 }

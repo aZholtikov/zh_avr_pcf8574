@@ -129,17 +129,14 @@ static avr_err_t _zh_avr_pcf8574_configure_interrupts(const zh_avr_pcf8574_init_
     return AVR_OK;
 }
 
-void zh_avr_pcf8574_isr_handler(void)
+BaseType_t zh_avr_pcf8574_isr_handler(void)
 {
+    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
     if ((PIND & (1 << _interrupt_gpio)) == 0)
     {
-        BaseType_t xHigherPriorityTaskWoken = pdFALSE;
         xSemaphoreGiveFromISR(_interrupt_semaphore, &xHigherPriorityTaskWoken);
-        if (xHigherPriorityTaskWoken == pdTRUE)
-        {
-            portYIELD();
-        };
     }
+    return xHigherPriorityTaskWoken;
 }
 
 static void _zh_avr_pcf8574_isr_processing_task(void *pvParameter)
