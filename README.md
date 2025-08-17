@@ -9,7 +9,7 @@
 ## Note
 
 1. Enable interrupt support only if input GPIO's are used.
-2. All the INT GPIO's on the extenders must be connected to the one GPIO on AVR. Only PORTD4 - PORTD7 are acceptable!
+2. All the INT GPIO's on the extenders must be connected to the one GPIO on AVR. Only PORTD0 - PORTD7 are acceptable!
 3. The input GPIO's are always pullup to the power supply.
 
 ## Dependencies
