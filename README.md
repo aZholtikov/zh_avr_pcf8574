@@ -9,7 +9,7 @@
 ## Note
 
 1. Enable interrupt support only if input GPIO's are used.
-2. All the INT GPIO's on the extenders must be connected to the one GPIO on AVR. Only PORTD0 - PORTD7 are acceptable!
+2. All the INT GPIO's on the extenders must be connected to the one GPIO on AVR.
 3. The input GPIO's are always pullup to the power supply.
 
 ## Dependencies
@@ -78,8 +78,9 @@ void pcf8574_example_task(void *pvParameters)
     zh_avr_i2c_master_init(false);
     zh_avr_pcf8574_init_config_t pcf8574_init_config = ZH_AVR_PCF8574_INIT_CONFIG_DEFAULT();
     pcf8574_init_config.i2c_address = 0x38;
-    pcf8574_init_config.p0_gpio_work_mode = true; // Required only for input GPIO.
-    pcf8574_init_config.interrupt_gpio = PORTD4;  // Required only if used input GPIO interrupts.
+    pcf8574_init_config.p0_gpio_work_mode = true;   // Required only for input GPIO.
+    pcf8574_init_config.interrupt_port = AVR_PORTD; // Required only if used input GPIO interrupts.
+    pcf8574_init_config.interrupt_gpio = PORTD4;    // Required only if used input GPIO interrupts.
     zh_avr_pcf8574_init(&pcf8574_init_config, &pcf8574_handle);
     uint8_t reg = 0;
     zh_avr_pcf8574_read(&pcf8574_handle, &reg);
@@ -124,8 +125,13 @@ void zh_avr_pcf8574_event_handler(zh_avr_pcf8574_event_on_isr_t *event) // Do no
     printf("Interrupt Task Remaining Stack Size %d.\n", uxTaskGetStackHighWaterMark(NULL));
 }
 
-ISR(PCINT2_vect) // Required only if used input GPIO interrupts.
+// ISR(PCINT0_vect) // For AVR_PORTB. Required only if used input GPIO interrupts.
+// ISR(PCINT1_vect) // For AVR_PORTC. Required only if used input GPIO interrupts.
+ISR(PCINT2_vect) // For AVR_PORTD. Required only if used input GPIO interrupts.
 {
-    zh_avr_pcf8574_isr_handler();
+    if (zh_avr_pcf8574_isr_handler() == pdTRUE)
+    {
+        portYIELD();
+    }
 }
 ```

@@ -2,9 +2,11 @@
 
 #include "FreeRTOS.h"
 #include "semphr.h"
+#include "avr/pgmspace.h"
 #include "zh_avr_i2c.h"
 #include "zh_avr_vector.h"
 #include "avr_err.h"
+#include "avr_port.h"
 #include "avr_bit_defs.h"
 
 #define ZH_AVR_PCF8574_INIT_CONFIG_DEFAULT()   \
@@ -20,7 +22,8 @@
         .p5_gpio_work_mode = 0,                \
         .p6_gpio_work_mode = 0,                \
         .p7_gpio_work_mode = 0,                \
-        .interrupt_gpio = 0xFF}
+        .interrupt_gpio = 0xFF,                \
+        .interrupt_port = 0}
 
 #ifdef __cplusplus
 extern "C"
@@ -41,6 +44,7 @@ extern "C"
         bool p6_gpio_work_mode; // Expander GPIO P6 work mode. True for input, false for output.
         bool p7_gpio_work_mode; // Expander GPIO P7 work mode. True for input, false for output.
         uint8_t interrupt_gpio; // Interrupt GPIO. @attention Must be same for all PCF8574 expanders.
+        uint8_t interrupt_port; // Interrupt port.
     } zh_avr_pcf8574_init_config_t;
 
     typedef struct // PCF8574 expander handle.
