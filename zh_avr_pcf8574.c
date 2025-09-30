@@ -1,5 +1,6 @@
 #include "zh_avr_pcf8574.h"
 
+TaskHandle_t zh_avr_pcf8574 = NULL;
 static uint8_t _interrupt_gpio = 0xFF;
 static uint8_t _interrupt_port = 0;
 static SemaphoreHandle_t _interrupt_semaphore = NULL;
@@ -145,7 +146,7 @@ static avr_err_t _zh_avr_pcf8574_configure_interrupts(const zh_avr_pcf8574_init_
     }
     _interrupt_semaphore = xSemaphoreCreateBinary();
     ZH_ERROR_CHECK(_interrupt_semaphore != NULL, AVR_ERR_NO_MEM);
-    BaseType_t x_err = xTaskCreate(_zh_avr_pcf8574_isr_processing_task, NULL, config->stack_size, NULL, config->task_priority, NULL);
+    BaseType_t x_err = xTaskCreate(_zh_avr_pcf8574_isr_processing_task, "zh_avr_pcf8574", config->stack_size, NULL, config->task_priority, &zh_avr_pcf8574);
     if (x_err != pdPASS)
     {
         vSemaphoreDelete(_interrupt_semaphore);
