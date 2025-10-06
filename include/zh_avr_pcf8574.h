@@ -33,7 +33,7 @@ extern "C"
     typedef struct // Structure for initial initialization of PCF8574 expander.
     {
         uint8_t task_priority;  // Task priority for the PCF8574 expander isr processing. @note It is not recommended to set a value less than configMAX_PRIORITIES.
-        uint8_t stack_size;     // Stack size for task for the PCF8574 expander isr processing processing. @note The minimum size is 124 byte.
+        uint8_t stack_size;     // Stack size for task for the PCF8574 expander isr processing processing.
         uint8_t i2c_address;    // Expander I2C address.
         bool p0_gpio_work_mode; // Expander GPIO PO work mode. True for input, false for output.
         bool p1_gpio_work_mode; // Expander GPIO P1 work mode. True for input, false for output.

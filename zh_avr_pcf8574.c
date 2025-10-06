@@ -82,7 +82,7 @@ static avr_err_t _zh_avr_pcf8574_validate_config(const zh_avr_pcf8574_init_confi
 {
     ZH_ERROR_CHECK(config != NULL, AVR_ERR_INVALID_ARG);
     ZH_ERROR_CHECK((config->i2c_address >= 0x20 && config->i2c_address <= 0x27) || (config->i2c_address >= 0x38 && config->i2c_address <= 0x3F), AVR_ERR_INVALID_ARG);
-    ZH_ERROR_CHECK(config->task_priority > tskIDLE_PRIORITY && config->stack_size >= 124, AVR_ERR_INVALID_ARG);
+    ZH_ERROR_CHECK(config->task_priority > tskIDLE_PRIORITY && config->stack_size >= configMINIMAL_STACK_SIZE, AVR_ERR_INVALID_ARG);
     ZH_ERROR_CHECK(config->interrupt_gpio == 0xFF || (config->interrupt_gpio >= 0 && config->interrupt_gpio <= 7), AVR_ERR_INVALID_ARG);
     if (config->interrupt_gpio != 0xFF)
     {
