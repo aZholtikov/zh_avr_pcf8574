@@ -5,6 +5,7 @@ static uint8_t _interrupt_gpio = 0xFF;
 static uint8_t _interrupt_port = 0;
 static SemaphoreHandle_t _interrupt_semaphore = NULL;
 static const uint8_t _gpio_matrix[8] PROGMEM = {AVR_BIT0, AVR_BIT1, AVR_BIT2, AVR_BIT3, AVR_BIT4, AVR_BIT5, AVR_BIT6, AVR_BIT7};
+volatile static bool _interrupt_on = false;
 
 static zh_avr_vector_t _vector = {0};
 
@@ -161,21 +162,60 @@ BaseType_t zh_avr_pcf8574_isr_handler(void)
     switch (_interrupt_port)
     {
     case AVR_PORTB:
+        if ((PINB & (1 << _interrupt_gpio)) == (1 << _interrupt_gpio))
+        {
+            if (_interrupt_on == false)
+            {
+                _interrupt_on = true;
+            }
+            break;
+        }
         if ((PINB & (1 << _interrupt_gpio)) == 0)
         {
-            xSemaphoreGiveFromISR(_interrupt_semaphore, &xHigherPriorityTaskWoken);
+            if (_interrupt_on == true)
+            {
+                _interrupt_on = false;
+                xSemaphoreGiveFromISR(_interrupt_semaphore, &xHigherPriorityTaskWoken);
+            }
+            break;
         }
         break;
     case AVR_PORTC:
+        if ((PINC & (1 << _interrupt_gpio)) == (1 << _interrupt_gpio))
+        {
+            if (_interrupt_on == false)
+            {
+                _interrupt_on = true;
+            }
+            break;
+        }
         if ((PINC & (1 << _interrupt_gpio)) == 0)
         {
-            xSemaphoreGiveFromISR(_interrupt_semaphore, &xHigherPriorityTaskWoken);
+            if (_interrupt_on == true)
+            {
+                _interrupt_on = false;
+                xSemaphoreGiveFromISR(_interrupt_semaphore, &xHigherPriorityTaskWoken);
+            }
+            break;
         }
         break;
     case AVR_PORTD:
+        if ((PIND & (1 << _interrupt_gpio)) == (1 << _interrupt_gpio))
+        {
+            if (_interrupt_on == false)
+            {
+                _interrupt_on = true;
+            }
+            break;
+        }
         if ((PIND & (1 << _interrupt_gpio)) == 0)
         {
-            xSemaphoreGiveFromISR(_interrupt_semaphore, &xHigherPriorityTaskWoken);
+            if (_interrupt_on == true)
+            {
+                _interrupt_on = false;
+                xSemaphoreGiveFromISR(_interrupt_semaphore, &xHigherPriorityTaskWoken);
+            }
+            break;
         }
         break;
     default:
